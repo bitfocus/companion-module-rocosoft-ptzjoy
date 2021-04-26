@@ -55,7 +55,7 @@ function instance(system, id, config) {
 		{ id: 'ExtPresets',	label: 'Use External Presets' },
 		{ id: 'SetPreset',	label: 'Save Current Preset' },
 	]
-
+	
 	return self;
 }
 
@@ -68,15 +68,17 @@ instance.prototype.updateConfig = function(config) {
 }
 
 instance.prototype.init = function() {
-	var self = this;
+	var self = this
 
-	self.status(self.STATE_OK);
+	self.status(self.STATE_OK)
 
-	debug = self.debug;
-	log = self.log;
+	debug = self.debug
+	log = self.log
+	
+	self.init_presets()
 	
 	// export actions
-	self.actions(); 
+	self.actions() 
 }
 
 // Return config fields for web config
@@ -88,19 +90,19 @@ instance.prototype.config_fields = function () {
 			id: 'info',
 			width: 12,
 			label: 'Information',
-			value: 'This module will allow you to use Companion with the Rocosoft PTZJoy controller.'
+			value: 'This module will allow you to use Companion with the Rocosoft PTZJoy software camera controller.'
 		},
 		{
 			type: 'textinput',
 			id: 'host',
-			label: 'Controller IP Address',
+			label: 'PTZJoy IP Address',
 			width: 6,
 			regex: self.REGEX_IP,
 		},
 		{
 			type: 'textinput',
 			id: 'port',
-			label: 'Controller Port',
+			label: 'PTZJoy Port',
 			width: 6,
 			default: '80',
 			regex: self.REGEX_PORT,
@@ -112,6 +114,191 @@ instance.prototype.config_fields = function () {
 instance.prototype.destroy = function() {
 	var self = this;
 	debug("destroy");
+}
+
+instance.prototype.presets = function () {
+	var self = this
+	self.setPresetDefinitions(presets.getPresets(self.label))
+}
+
+instance.prototype.init_presets = function () {
+	var self = this
+	var presets = []
+	var i
+
+	for (i = 0; i < self.movementActions.length; ++i) {
+		presets.push({
+			category: 'Basic Movement',
+			label: self.movementActions[i].label,
+			bank: {
+				style: 'text',
+				text: self.movementActions[i].label,
+				size: '18',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'movement',
+					options: {
+						moveAction: self.movementActions[i].id,
+					},
+				},
+			],
+		})
+	}
+	
+	for (i = 0; i < self.portActions.length; ++i) {
+		presets.push({
+			category: 'Port Management',
+			label: self.portActions[i].label,
+			bank: {
+				style: 'text',
+				text: self.portActions[i].label,
+				size: '18',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'portManagement',
+					options: {
+						portAction: self.portActions[i].id,
+					},
+				},
+			],
+		})
+	}
+	
+	for (i = 0; i < self.cameraActions.length; ++i) {
+		presets.push({
+			category: 'Camera Management',
+			label: self.cameraActions[i].label,
+			bank: {
+				style: 'text',
+				text: self.cameraActions[i].label,
+				size: '14',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'cameraManagement',
+					options: {
+						cameraAction: self.cameraActions[i].id,
+					},
+				},
+			],
+		})
+	}
+	
+	for (i = 0; i < self.presetActions.length; ++i) {
+		presets.push({
+			category: 'Preset Management',
+			label: self.cameraActions[i].label,
+			bank: {
+				style: 'text',
+				text: self.presetActions[i].label,
+				size: '18',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'presetManagement',
+					options: {
+						presetAction: self.presetActions[i].id,
+					},
+				},
+			],
+		})
+	}
+	
+	for (i = 1; i < 33; i++) {
+		presets.push({
+			category: 'Load Preset',
+			label: 'Preset ' + String(i),
+			bank: {
+				style: 'text',
+				text: 'Preset\\n' + String(i),
+				size: '18',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'getPreset',
+					options: {
+						presetNumber: i,
+					},
+				},
+			],
+		})
+	}
+	
+	for (i = 1; i < 17; i++) {
+		presets.push({
+			category: 'Run Macro',
+			label: 'Macro ' + String(i),
+			bank: {
+				style: 'text',
+				text: 'Macro\\n' + String(i),
+				size: '18',
+				color: 16777215,
+				bgcolor: 0,
+			},
+			actions: [
+				{
+					action: 'getMacro',
+					options: {
+						presetNumber: i,
+					},
+				},
+			],
+		})
+	}
+	
+	presets.push({
+		category: 'Tally',
+		label: 'Tally On',
+		bank: {
+			style: 'text',
+			text: 'Tally On',
+			size: '18',
+			color: 16777215,
+			bgcolor: 0,
+			},
+			actions: [
+			{
+				action: 'tally',
+				options: {
+					tally: 'TallyOn',
+				},
+			},
+		],
+	})
+	
+	presets.push({
+		category: 'Tally',
+		label: 'Tally Off',
+		bank: {
+			style: 'text',
+			text: 'Tally Off',
+			size: '18',
+			color: 16777215,
+			bgcolor: 0,
+			},
+			actions: [
+			{
+				action: 'tally',
+				options: {
+					tally: 'TallyOff',
+				},
+			},
+		],
+	})
+	
+	self.setPresetDefinitions(presets)
 }
 
 // Create actions
@@ -216,6 +403,36 @@ instance.prototype.actions = function(system) {
 				}
 			]
 		},
+		'tally': {
+			label: 'Tally',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Tally',
+					id: 'tally',
+					default: 'TallyOn',
+					choices: [
+						{ id: 'TallyOn', label: 'On' },
+						{ id: 'TallyOff', label: 'Off' },
+					]
+				}
+			]
+		},
+		'power': {
+			label: 'Camera Power',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Power',
+					id: 'power',
+					default: 'CamOn',
+					choices: [
+						{ id: 'CamOn', label: 'On' },
+						{ id: 'CamOff', label: 'Off' },
+					]
+				}
+			]
+		},
 	});
 }
 
@@ -253,9 +470,15 @@ instance.prototype.action = function (action) {
 			self.sendGet('RunMacro' + String(opt.presetNumber))
 			break;
 		}
+		case 'tally': {
+			self.sendGet(opt.tally)
+			break;
+		}
+		case 'power': {
+			self.sendGet(opt.power)
+			break;
+		}
 	}
-	
-	
 }	
 
 // send command to PTZJoy websocket
@@ -275,40 +498,6 @@ instance.prototype.sendGet = function(cmd) {
 			// self.status(self.STATUS_OK);
 		}
 	});
-	
-	/*
-	if (action.action == 'get') {
-		var header;
-		if(!!action.options.header) {
-			try {
-				header = JSON.parse(action.options.header);
-			} catch(e){
-				self.log('error', 'HTTP POST Request aborted: Malformed JSON header (' + e.message+ ')');
-				self.status(self.STATUS_ERROR, e.message);
-				return
-			}
-			self.system.emit('rest_get', cmd, function (err, result) {
-				if (err !== null) {
-					self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
-					self.status(self.STATUS_ERROR, result.error.code);
-				}
-				else {
-					self.status(self.STATUS_OK);
-				}
-			}, header);
-		} else {
-			self.system.emit('rest_get', cmd, function (err, result) {
-				if (err !== null) {
-					self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
-					self.status(self.STATUS_ERROR, result.error.code);
-				}
-				else {
-					self.status(self.STATUS_OK);
-				}
-			});
-		}
-	}
-	*/
 
 }
 
