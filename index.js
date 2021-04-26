@@ -107,6 +107,13 @@ instance.prototype.config_fields = function () {
 			default: '80',
 			regex: self.REGEX_PORT,
 		},
+		{
+			type: 'checkbox',
+			id: 'debuglog',
+			label: 'Show command URL in debug log',
+			width: 6,
+			default: false,
+		}
 	]
 }
 
@@ -263,7 +270,7 @@ instance.prototype.init_presets = function () {
 		label: 'Tally On',
 		bank: {
 			style: 'text',
-			text: 'Tally On',
+			text: 'Tally\\nOn',
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
@@ -283,7 +290,7 @@ instance.prototype.init_presets = function () {
 		label: 'Tally Off',
 		bank: {
 			style: 'text',
-			text: 'Tally Off',
+			text: 'Tally\\nOff',
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
@@ -293,6 +300,46 @@ instance.prototype.init_presets = function () {
 				action: 'tally',
 				options: {
 					tally: 'TallyOff',
+				},
+			},
+		],
+	})
+	
+	presets.push({
+		category: 'Camera Power',
+		label: 'Power On',
+		bank: {
+			style: 'text',
+			text: 'Power\\nOn',
+			size: '18',
+			color: 16777215,
+			bgcolor: 0,
+			},
+			actions: [
+			{
+				action: 'power',
+				options: {
+					power: 'CamOn',
+				},
+			},
+		],
+	})
+	
+	presets.push({
+		category: 'Camera Power',
+		label: 'Power Off',
+		bank: {
+			style: 'text',
+			text: 'Power\\nOff',
+			size: '18',
+			color: 16777215,
+			bgcolor: 0,
+			},
+			actions: [
+			{
+				action: 'power',
+				options: {
+					power: 'CamOff',
 				},
 			},
 		],
@@ -486,7 +533,11 @@ instance.prototype.sendGet = function(cmd) {
 	var self = this;
 
 	cmdUrl = 'http://' + self.config.host + ':' + self.config.port + '/PTZJoy=' + cmd
-	self.log('debug',cmdUrl)
+	
+	if (self.config.debuglog === true) {
+		self.log('debug',cmdUrl)
+	}
+	
 	console.log(cmdUrl)
 	
 	self.system.emit('rest_get', cmdUrl, function (err, result) {
