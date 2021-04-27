@@ -542,11 +542,15 @@ instance.prototype.sendGet = function(cmd) {
 	
 	self.system.emit('rest_get', cmdUrl, function (err, result) {
 		if (err !== null) {
-			// PTZJoy software is not fully compatible with rest_get and returns errors
-			// self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
-			// self.status(self.STATUS_ERROR, result.error.code);
+			if (result.error.code == 'HPE_INVALID_CONSTANT') {
+				// PTZJoy software is not fully compatible with rest_get and returns this error always
+				self.status(self.STATUS_OK);
+			} else {
+				self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
+				self.status(self.STATUS_ERROR, result.error.code);
+			} 
 		} else {
-			// self.status(self.STATUS_OK);
+			self.status(self.STATUS_OK);
 		}
 	});
 
