@@ -1,96 +1,96 @@
-var instance_skel = require('../../instance_skel');
-var debug;
-var log;
+var instance_skel = require('../../instance_skel')
+var debug
+var log
 
 function instance(system, id, config) {
-	var self = this;
+	var self = this
 
 	// super-constructor
-	instance_skel.apply(this, arguments);
+	instance_skel.apply(this, arguments)
 
 	self.movementActions = [
-		{ id: 'Left',		label: 'Left' },
-		{ id: 'Right',		label: 'Right' },
-		{ id: 'Up',			label: 'Up' },
-		{ id: 'Down',		label: 'Down' },
-		{ id: 'UpLeft',		label: 'Up Left' },
-		{ id: 'UpRight',	label: 'Up Right' },
-		{ id: 'DownLeft',	label: 'Down Left' },
-		{ id: 'DownRight',	label: 'Down Right' },
-		{ id: 'Stop',		label: 'Stop' },
-		{ id: 'ZoomIn',		label: 'Zoom In' },
-		{ id: 'ZoomOut',	label: 'Zoom Out' },
-		{ id: 'ZoomStop',	label: 'Zoom Stop' },
-		{ id: 'FocusAuto',	label: 'Focus Auto' },
-		{ id: 'FocusNear',	label: 'Focus Near' },
-		{ id: 'FocusFar',	label: 'Focus Far' },
-		{ id: 'Home',		label: 'Home' },
+		{ id: 'Left', label: 'Left' },
+		{ id: 'Right', label: 'Right' },
+		{ id: 'Up', label: 'Up' },
+		{ id: 'Down', label: 'Down' },
+		{ id: 'UpLeft', label: 'Up Left' },
+		{ id: 'UpRight', label: 'Up Right' },
+		{ id: 'DownLeft', label: 'Down Left' },
+		{ id: 'DownRight', label: 'Down Right' },
+		{ id: 'Stop', label: 'Stop' },
+		{ id: 'ZoomIn', label: 'Zoom In' },
+		{ id: 'ZoomOut', label: 'Zoom Out' },
+		{ id: 'ZoomStop', label: 'Zoom Stop' },
+		{ id: 'FocusAuto', label: 'Focus Auto' },
+		{ id: 'FocusNear', label: 'Focus Near' },
+		{ id: 'FocusFar', label: 'Focus Far' },
+		{ id: 'Home', label: 'Home' },
 	]
-	
+
 	self.portActions = [
-		{ id: 'PortUp',		label: 'Port Up' },
-		{ id: 'PortDown',	label: 'Port Down' },
-		{ id: 'Port1',		label: 'Port 1' },
-		{ id: 'Port2',		label: 'Port 2' },
-		{ id: 'Port3',		label: 'Port 3' },
-		{ id: 'Port4',		label: 'Port 4' },
-		{ id: 'Port5',		label: 'Port 5' },
+		{ id: 'PortUp', label: 'Port Up' },
+		{ id: 'PortDown', label: 'Port Down' },
+		{ id: 'Port1', label: 'Port 1' },
+		{ id: 'Port2', label: 'Port 2' },
+		{ id: 'Port3', label: 'Port 3' },
+		{ id: 'Port4', label: 'Port 4' },
+		{ id: 'Port5', label: 'Port 5' },
 	]
-	
+
 	self.cameraActions = [
-		{ id: 'CamNumUp',	label: 'Camera Number Up' },
-		{ id: 'CamNumDown',	label: 'Camera Number Down' },
-		{ id: 'Camera1',	label: 'Camera 1' },
-		{ id: 'Camera2',	label: 'Camera 2' },
-		{ id: 'Camera3',	label: 'Camera 3' },
-		{ id: 'Camera4',	label: 'Camera 4' },
-		{ id: 'Camera5',	label: 'Camera 5' },
-		{ id: 'Camera6',	label: 'Camera 6' },
-		{ id: 'Camera7',	label: 'Camera 7' },
-		{ id: 'Camera8',	label: 'Camera 8' },
+		{ id: 'CamNumUp', label: 'Camera Number Up' },
+		{ id: 'CamNumDown', label: 'Camera Number Down' },
+		{ id: 'Camera1', label: 'Camera 1' },
+		{ id: 'Camera2', label: 'Camera 2' },
+		{ id: 'Camera3', label: 'Camera 3' },
+		{ id: 'Camera4', label: 'Camera 4' },
+		{ id: 'Camera5', label: 'Camera 5' },
+		{ id: 'Camera6', label: 'Camera 6' },
+		{ id: 'Camera7', label: 'Camera 7' },
+		{ id: 'Camera8', label: 'Camera 8' },
 	]
-	
+
 	self.presetActions = [
-		{ id: 'IntPresets',	label: 'Use Internal Presets' },
-		{ id: 'ExtPresets',	label: 'Use External Presets' },
-		{ id: 'SetPreset',	label: 'Save Current Preset' },
+		{ id: 'IntPresets', label: 'Use Internal Presets' },
+		{ id: 'ExtPresets', label: 'Use External Presets' },
+		{ id: 'SetPreset', label: 'Save Current Preset' },
 	]
-	
-	return self;
+
+	return self
 }
 
-instance.prototype.updateConfig = function(config) {
-	var self = this;
+instance.prototype.updateConfig = function (config) {
+	var self = this
 
-	self.config = config;
+	self.config = config
 
-	self.actions();
+	self.actions()
 }
 
-instance.prototype.init = function() {
+instance.prototype.init = function () {
 	var self = this
 
 	self.status(self.STATE_OK)
 
 	debug = self.debug
 	log = self.log
-	
+
 	self.init_presets()
-	
+
 	// export actions
-	self.actions() 
+	self.actions()
 }
 
 // Return config fields for web config
 instance.prototype.config_fields = function () {
-	var self = this;
+	var self = this
 	return [
 		{
 			type: 'text',
 			id: 'info',
 			width: 12,
 			label: 'Information',
-			value: 'This module will allow you to use Companion with the Rocosoft PTZJoy software camera controller.'
+			value: 'This module will allow you to use Companion with the Rocosoft PTZJoy software camera controller.',
 		},
 		{
 			type: 'textinput',
@@ -113,14 +113,14 @@ instance.prototype.config_fields = function () {
 			label: 'Show command URL in debug log',
 			width: 6,
 			default: false,
-		}
+		},
 	]
 }
 
 // When module gets deleted
-instance.prototype.destroy = function() {
-	var self = this;
-	debug("destroy");
+instance.prototype.destroy = function () {
+	var self = this
+	debug('destroy')
 }
 
 instance.prototype.presets = function () {
@@ -154,7 +154,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	for (i = 0; i < self.portActions.length; ++i) {
 		presets.push({
 			category: 'Port Management',
@@ -176,7 +176,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	for (i = 0; i < self.cameraActions.length; ++i) {
 		presets.push({
 			category: 'Camera Management',
@@ -198,7 +198,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	for (i = 0; i < self.presetActions.length; ++i) {
 		presets.push({
 			category: 'Preset Management',
@@ -220,7 +220,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	for (i = 1; i < 33; i++) {
 		presets.push({
 			category: 'Load Preset',
@@ -242,7 +242,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	for (i = 1; i < 17; i++) {
 		presets.push({
 			category: 'Run Macro',
@@ -264,7 +264,7 @@ instance.prototype.init_presets = function () {
 			],
 		})
 	}
-	
+
 	presets.push({
 		category: 'Tally',
 		label: 'Tally On',
@@ -274,8 +274,8 @@ instance.prototype.init_presets = function () {
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
-			},
-			actions: [
+		},
+		actions: [
 			{
 				action: 'tally',
 				options: {
@@ -284,7 +284,7 @@ instance.prototype.init_presets = function () {
 			},
 		],
 	})
-	
+
 	presets.push({
 		category: 'Tally',
 		label: 'Tally Off',
@@ -294,8 +294,8 @@ instance.prototype.init_presets = function () {
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
-			},
-			actions: [
+		},
+		actions: [
 			{
 				action: 'tally',
 				options: {
@@ -304,7 +304,7 @@ instance.prototype.init_presets = function () {
 			},
 		],
 	})
-	
+
 	presets.push({
 		category: 'Camera Power',
 		label: 'Power On',
@@ -314,8 +314,8 @@ instance.prototype.init_presets = function () {
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
-			},
-			actions: [
+		},
+		actions: [
 			{
 				action: 'power',
 				options: {
@@ -324,7 +324,7 @@ instance.prototype.init_presets = function () {
 			},
 		],
 	})
-	
+
 	presets.push({
 		category: 'Camera Power',
 		label: 'Power Off',
@@ -334,8 +334,8 @@ instance.prototype.init_presets = function () {
 			size: '18',
 			color: 16777215,
 			bgcolor: 0,
-			},
-			actions: [
+		},
+		actions: [
 			{
 				action: 'power',
 				options: {
@@ -344,16 +344,16 @@ instance.prototype.init_presets = function () {
 			},
 		],
 	})
-	
+
 	self.setPresetDefinitions(presets)
 }
 
 // Create actions
-instance.prototype.actions = function(system) {
-	var self = this;
+instance.prototype.actions = function (system) {
+	var self = this
 
 	self.setActions({
-		'movement': {
+		movement: {
 			label: 'Basic Movement',
 			options: [
 				{
@@ -365,7 +365,7 @@ instance.prototype.actions = function(system) {
 				},
 			],
 		},
-		'portManagement': {
+		portManagement: {
 			label: 'Port Management',
 			options: [
 				{
@@ -377,7 +377,7 @@ instance.prototype.actions = function(system) {
 				},
 			],
 		},
-		'cameraManagement': {
+		cameraManagement: {
 			label: 'Camera Management',
 			options: [
 				{
@@ -389,7 +389,7 @@ instance.prototype.actions = function(system) {
 				},
 			],
 		},
-		'presetManagement': {
+		presetManagement: {
 			label: 'Preset Management',
 			options: [
 				{
@@ -401,7 +401,7 @@ instance.prototype.actions = function(system) {
 				},
 			],
 		},
-		'getPreset': {
+		getPreset: {
 			label: 'Load Preset',
 			options: [
 				{
@@ -411,10 +411,10 @@ instance.prototype.actions = function(system) {
 					min: 1,
 					max: 32,
 					default: 1,
-				}
-			]
+				},
+			],
 		},
-		'setPreset': {
+		setPreset: {
 			label: 'Save Preset',
 			options: [
 				{
@@ -425,7 +425,7 @@ instance.prototype.actions = function(system) {
 					choices: [
 						{ id: 'Int', label: 'Internal' },
 						{ id: 'Ext', label: 'External' },
-					]
+					],
 				},
 				{
 					type: 'number',
@@ -437,7 +437,7 @@ instance.prototype.actions = function(system) {
 				},
 			],
 		},
-		'getMacro': {
+		getMacro: {
 			label: 'Run Macro',
 			options: [
 				{
@@ -447,10 +447,10 @@ instance.prototype.actions = function(system) {
 					min: 1,
 					max: 16,
 					default: 1,
-				}
-			]
+				},
+			],
 		},
-		'tally': {
+		tally: {
 			label: 'Tally',
 			options: [
 				{
@@ -461,11 +461,11 @@ instance.prototype.actions = function(system) {
 					choices: [
 						{ id: 'TallyOn', label: 'On' },
 						{ id: 'TallyOff', label: 'Off' },
-					]
-				}
-			]
+					],
+				},
+			],
 		},
-		'power': {
+		power: {
 			label: 'Camera Power',
 			options: [
 				{
@@ -476,85 +476,84 @@ instance.prototype.actions = function(system) {
 					choices: [
 						{ id: 'CamOn', label: 'On' },
 						{ id: 'CamOff', label: 'Off' },
-					]
-				}
-			]
+					],
+				},
+			],
 		},
-	});
+	})
 }
 
 // Process actions
 instance.prototype.action = function (action) {
 	var self = this
 	const opt = action.options
-	
-	switch(action.action) {
+
+	switch (action.action) {
 		case 'movement': {
 			self.sendGet(opt.moveAction)
-			break;
+			break
 		}
 		case 'portManagement': {
 			self.sendGet(opt.portAction)
-			break;
+			break
 		}
 		case 'cameraManagement': {
 			self.sendGet(opt.cameraAction)
-			break;
+			break
 		}
 		case 'presetManagement': {
 			self.sendGet(opt.presetAction)
-			break;
+			break
 		}
 		case 'getPreset': {
 			self.sendGet('Preset' + String(opt.presetNumber))
-			break;
+			break
 		}
 		case 'setPreset': {
 			self.sendGet('Set' + opt.setPresetType + 'Preset=' + String(opt.presetNumber))
-			break;
+			break
 		}
 		case 'getMacro': {
 			self.sendGet('RunMacro' + String(opt.presetNumber))
-			break;
+			break
 		}
 		case 'tally': {
 			self.sendGet(opt.tally)
-			break;
+			break
 		}
 		case 'power': {
 			self.sendGet(opt.power)
-			break;
+			break
 		}
 	}
-}	
+}
 
-// send command to PTZJoy websocket
-instance.prototype.sendGet = function(cmd) {
-	var self = this;
+// send command to PTZJoy
+instance.prototype.sendGet = function (cmd) {
+	var self = this
 
 	cmdUrl = 'http://' + self.config.host + ':' + self.config.port + '/PTZJoy=' + cmd
-	
+
 	if (self.config.debuglog === true) {
-		self.log('debug',cmdUrl)
+		self.log('debug', cmdUrl)
 	}
-	
+
 	console.log(cmdUrl)
-	
+
 	self.system.emit('rest_get', cmdUrl, function (err, result) {
 		if (err !== null) {
 			if (result.error.code == 'HPE_INVALID_CONSTANT') {
 				// PTZJoy software is not fully compatible with rest_get and returns this error always
-				self.status(self.STATUS_OK);
+				self.status(self.STATUS_OK)
 			} else {
-				self.log('error', 'HTTP GET Request failed (' + result.error.code + ')');
-				self.status(self.STATUS_ERROR, result.error.code);
-			} 
+				self.log('error', 'HTTP GET Request failed (' + result.error.code + ')')
+				self.status(self.STATUS_ERROR, result.error.code)
+			}
 		} else {
-			self.status(self.STATUS_OK);
+			self.status(self.STATUS_OK)
 		}
-	});
-
+	})
 }
 
-instance_skel.extendedBy(instance);
-exports = module.exports = instance;
+instance_skel.extendedBy(instance)
+exports = module.exports = instance
