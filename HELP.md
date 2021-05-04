@@ -10,3 +10,6 @@ All editions of PTZJoy are supported, consult the Rocosoft website for more info
 
 ## Version 1.0.0
 First Release
+
+## Version 1.0.1
+Add additional joystick control functions

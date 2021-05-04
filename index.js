@@ -55,6 +55,17 @@ function instance(system, id, config) {
 		{ id: 'ExtPresets', label: 'Use External Presets' },
 		{ id: 'SetPreset', label: 'Save Current Preset' },
 	]
+	
+	self.utilActions = [
+		{ id: 'XJoyOn', label: 'Pan Only On (Disable Tilt Up/Down)' },
+		{ id: 'XJoyOff', label: 'Pan Only Off (Enable Tilt Up/Down)' },
+		{ id: 'SlowJoy1', label: 'Slow/Stretch 1' },
+		{ id: 'SlowJoy2', label: 'Slow/Stretch 2' },
+		{ id: 'SlowJoy3', label: 'Slow/Stretch 3' },
+		{ id: 'SlowJoyOff', label: 'Slow/Stretch Off' },
+	//	{ id: 'SoftJoyOn', label: 'Soft Joy On' },
+	//	{ id: 'SoftJoyOff', label: 'Soft Joy Off' },
+	]
 
 	return self
 }
@@ -480,6 +491,18 @@ instance.prototype.actions = function (system) {
 				},
 			],
 		},
+		utils: {
+			label: 'Other Functions',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Slow Mode',
+					id: 'utils',
+					default: 'XJoyOn',
+					choices: self.utilActions,
+				},
+			],
+		},
 	})
 }
 
@@ -523,6 +546,10 @@ instance.prototype.action = function (action) {
 		}
 		case 'power': {
 			self.sendGet(opt.power)
+			break
+		}
+		case 'utils': {
+			self.sendGet(opt.utils)
 			break
 		}
 	}
