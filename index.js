@@ -496,7 +496,7 @@ instance.prototype.actions = function (system) {
 			options: [
 				{
 					type: 'dropdown',
-					label: 'Slow Mode',
+					label: 'Function',
 					id: 'utils',
 					default: 'XJoyOn',
 					choices: self.utilActions,
