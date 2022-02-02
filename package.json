@@ -17,5 +17,13 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Peter Daniel",
-	"license": "MIT"
+	"license": "MIT",
+	"homepage": "https://github.com/bitfocus/companion-module-rocosoft-ptzjoy#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-rocosoft-ptzjoy/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-rocosoft-ptzjoy.git"
+	}
 }
